@@ -1,5 +1,7 @@
 from views import console_view
-from models import crud_model, generator_model, search_model
+import models.crud_model as crud_model
+import models.generator_model as generator_model
+import models.search_model as search_model
 
 def handle_users():
     """CRUD для таблиці Users."""
