@@ -4,8 +4,8 @@ from config import get_db_connection
 
 def generate_test_data(record_count: int = 100):
     """
-    Генерує тестові дані в базі даних засобами SQL-функцій PostgreSQL
-    відповідно до структури laba1.sql.
+    Генерує тестові дані (документи) в базі даних засобами SQL-функцій PostgreSQL
+    (generate_series, random) безпосередньо в базі даних.
     """
     connection = get_db_connection()
     try:
@@ -13,14 +13,13 @@ def generate_test_data(record_count: int = 100):
             print(f"[*] Початок генерації {record_count} записів для таблиці Document...")
             start_time = time.time()
 
-            # Виправлено назви стовпців та додано унікальний doc_number
             query = """
             INSERT INTO Document (doc_number, title, content, created_at, author_id, type_id)
             SELECT 
-                'DOC-' || i || '-' || trunc(random() * 100000)::int AS doc_number,
+                'DOC-' || i || '-' || trunc(random() * 1000000)::int AS doc_number,
                 'Згенерований документ №' || i AS title,
                 'Текст тестового документу номер ' || i AS content,
-                NOW() - (random() * INTERVAL '180 days') AS created_at,
+                NOW() - (random() * INTERVAL '365 days') AS created_at,
                 (SELECT user_id FROM Users ORDER BY random() LIMIT 1) AS author_id,
                 (SELECT type_id FROM DocumentType ORDER BY random() LIMIT 1) AS type_id
             FROM generate_series(1, %s) AS i;
@@ -38,7 +37,3 @@ def generate_test_data(record_count: int = 100):
         print(f"[Помилка генерації даних]: {error}")
     finally:
         connection.close()
-
-if __name__ == "__main__":
-    count = int(input("Введіть кількість записів для генерації: "))
-    generate_test_data(count)

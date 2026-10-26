@@ -5,7 +5,7 @@ from config import get_db_connection
 def search_documents_by_date_range(start_date: str, end_date: str):
     """
     1. Запит із діапазоном для дат (між start_date та end_date).
-    Об'єднує таблиці Document, Users та DocumentType згідно з laba1.sql.
+    Об'єднує таблиці Document, Users та DocumentType.
     """
     connection = get_db_connection()
     try:
